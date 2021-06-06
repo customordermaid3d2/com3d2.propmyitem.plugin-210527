@@ -1,12 +1,12 @@
 # 개조판
 
-로딩시간동안 겜이 멈추는걸 방지
-겜 시작시 바로 데이터 로딩이 스레드로 진행됨
+로딩시간동안 겜이 멈추는걸 방지  
+겜 시작시 바로 데이터 로딩이 스레드로 진행됨  
 
 # 넣는곳
 
-COM3D2.PropMyItem.Plugin.dll 는 UnityInjector 폴더에
-System.Threading.dll 는 COM3D2\BepInEx\plugins 폴더 또는 인식 가능한곳이면 어디든
+COM3D2.PropMyItem.Plugin.dll 는 UnityInjector 폴더
+System.Threading.dll 는 COM3D2\BepInEx\plugins 폴더
 
 # 필요한거
 
