@@ -12,6 +12,9 @@
         <Reference Include="Assembly-CSharp-firstpass">
           <HintPath>..\..\_lib2\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
+        <Reference Include="BepInEx">
+          <HintPath>F:\COM3D2_155\BepInEx\core\BepInEx.dll</HintPath>
+        </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Threading">
@@ -20,9 +23,6 @@
         <Reference Include="System.Xml" />
         <Reference Include="UnityEngine">
           <HintPath>..\..\_lib2\UnityEngine.dll</HintPath>
-        </Reference>
-        <Reference Include="UnityInjector">
-          <HintPath>..\..\_lib2\UnityInjector.dll</HintPath>
         </Reference>
     </ItemGroup>
 </Project>

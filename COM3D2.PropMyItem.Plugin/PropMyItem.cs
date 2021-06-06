@@ -1,28 +1,32 @@
-﻿using System;
+﻿using BepInEx;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityInjector;
-using UnityInjector.Attributes;
+using COM3D2.PropMyItem.Plugin;
+//using UnityInjector;
+//using UnityInjector.Attributes;
 using wf;
+using System.Linq;
 
 namespace COM3D2.PropMyItem.Plugin
 {
     using static CommonUtil;
 
     // Token: 0x0200000A RID: 10
-    [PluginFilter("COM3D2x64")]
-    [PluginFilter("COM3D2x86")]
-    [PluginFilter("COM3D2VRx64")]
-    [PluginFilter("COM3D2OHx86")]
-    [PluginFilter("COM3D2OHx64")]
-    [PluginFilter("COM3D2OHVRx64")]
-    [PluginName(PluginInfo.PluginName)]
-    [PluginVersion(PluginInfo.PluginVersion)]
-    public class PropMyItem : PluginBase
+    //[PluginFilter("COM3D2x64")]
+    //[PluginFilter("COM3D2x86")]
+    //[PluginFilter("COM3D2VRx64")]
+    //[PluginFilter("COM3D2OHx86")]
+    //[PluginFilter("COM3D2OHx64")]
+    //[PluginFilter("COM3D2OHVRx64")]
+    //[PluginName(PluginInfo.PluginName)]
+    //[PluginVersion(PluginInfo.PluginVersion)]
+    [BepInPlugin(PluginInfo.PluginName, PluginInfo.PluginName, PluginInfo.PluginVersion)]
+    public class PropMyItem : BaseUnityPlugin //: PluginBase
     {
         // Token: 0x0600002B RID: 43 RVA: 0x000030EC File Offset: 0x000012EC
         public PropMyItem()
@@ -159,14 +163,7 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x0600002C RID: 44 RVA: 0x00003808 File Offset: 0x00001A08
         public void Awake()
         {
-            GameMain.Instance.StartCoroutine(CheckMenuDatabase());
-            try
-            {
-                SceneManager.sceneLoaded += this.OnSceneLoaded;
-            }
-            catch (Exception)
-            {
-            }
+
         }
 
         private System.Collections.IEnumerator CheckMenuDatabase()
@@ -175,9 +172,21 @@ namespace COM3D2.PropMyItem.Plugin
             while (!GameMain.Instance.MenuDataBase.JobFinished()) yield return null;
             _menuFilesReady = true;
 
-            Task.Factory.StartNew(() => this.LoadMenuFiles(this._isForcedInit));
+			Task.Factory.StartNew(() => this.LoadMenuFiles());
 
             Console.WriteLine("PropMyItem: Menu files are ready");
+        }
+
+        public void Start()
+        {
+            GameMain.Instance.StartCoroutine(CheckMenuDatabase());
+            try
+            {
+                SceneManager.sceneLoaded += this.OnSceneLoaded;
+            }
+            catch (Exception)
+            {
+            }
         }
 
         // Token: 0x0600002D RID: 45 RVA: 0x0000383C File Offset: 0x00001A3C
@@ -228,12 +237,12 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 else
                 {
-                    if (this._isVisible && (this._isForcedInit))//!this._isStartUpLoadead || 
+					if (this._isVisible && (!_isLoadead && _isForcedInit))
                     {
                         //this._isStartUpLoadead = true;
-                        Task.Factory.StartNew(() => this.LoadMenuFiles(this._isForcedInit));
+                        Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
                         //this.LoadMenuFiles(this._isForcedInit);
-                        this._isForcedInit = false;
+                        //this._isForcedInit = false;
                     }
                     if (this._isVisible && this._windowRect.Contains(new Vector2(Input.mousePosition.x, (float)Screen.height - Input.mousePosition.y)))
                     {
@@ -335,7 +344,7 @@ namespace COM3D2.PropMyItem.Plugin
             {
                 this._isShowSetting = false;
                 this._isPluginKeyChange = false;
-                this._isForcedInit = true;
+                _isForcedInit = true;
             }
             num += GuiStyles.ControlHeight + GuiStyles.Margin + GuiStyles.Margin;
             if (GUI.Button(new Rect(margin, num, width, GuiStyles.ControlHeight), "戻る", GuiStyles.ButtonStyle))
@@ -1657,66 +1666,69 @@ namespace COM3D2.PropMyItem.Plugin
         {
             if (_isLoadead)
             {
+                Console.Write("PropMyItem：_isLoadead...");
                 return;
             }
             _isLoadead = true;
+            Console.Write("PropMyItem：LoadMenuFiles...st");
             try
             {
-                List<SMenuInfo> menuItems = new List<SMenuInfo>();
-                Dictionary<string, MenuInfo> dictionary = new Dictionary<string, MenuInfo>();
+                List<SMenuInfo> menuItems = new List<SMenuInfo>(); //COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems;//new List<SMenuInfo>();
+				Dictionary<string, MenuInfo> dictionary = new Dictionary<string, MenuInfo>();
                 if (!isInit)
                 {
-                    using (List<SMenuInfo>.Enumerator enumerator = Config.Instance.MenuItems.GetEnumerator())
+                    using (List<SMenuInfo>.Enumerator enumerator = COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.GetEnumerator())
                     {
                         while (enumerator.MoveNext())
                         {
                             SMenuInfo smenuInfo = enumerator.Current;
-                            if (!dictionary.ContainsKey(smenuInfo.FileName))
+							if (!dictionary.ContainsKey(smenuInfo.FileName))
                             {
-                                dictionary.Add(smenuInfo.FileName, new MenuInfo(smenuInfo));
+								dictionary.Add(smenuInfo.FileName, new MenuInfo(smenuInfo));
                             }
                         }
+						goto IL_CA;
                     }
                 }
-                else
-                {
-                    this._mpnMenuListDictionary = new Dictionary<MPN, List<MenuInfo>>();
-                    foreach (object obj in Enum.GetValues(typeof(MPN)))
-                    {
-                        MPN key = (MPN)obj;
-                        this._mpnMenuListDictionary.Add(key, new List<MenuInfo>());
-                    }
-                }
-
-                if (dictionary.Count == 0)
-                {
+				this._mpnMenuListDictionary = new Dictionary<MPN, List<MenuInfo>>();
+				foreach (object obj in Enum.GetValues(typeof(MPN)))
+				{
+					MPN key = (MPN)obj;
+					this._mpnMenuListDictionary.Add(key, new List<MenuInfo>());
+				}
+				IL_CA:
+				if (dictionary.Count == 0)
+				{
                     Console.Write("PropMyItem：準備中...");
-                }
-                Dictionary<string, string> dictionary2 = new Dictionary<string, string>();
-                foreach (string text in UserConfig.Instance.FavList)
-                {
-                    if (!dictionary2.ContainsKey(text))
-                    {
-                        dictionary2.Add(text.ToLower(), text);
-                    }
-                }
-                Dictionary<string, string> dictionary3 = new Dictionary<string, string>();
-                foreach (string text2 in UserConfig.Instance.ColorLockList)
-                {
-                    if (!dictionary3.ContainsKey(text2))
-                    {
-                        dictionary3.Add(text2.ToLower(), text2);
-                    }
-                }
-                List<MenuInfo> list = new List<MenuInfo>();
-                this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                this.SetVariationMenu(dictionary2, dictionary3, ref list);
+				}
+				Dictionary<string, string> dictionary2 = new Dictionary<string, string>();
+				foreach (string text in UserConfig.Instance.FavList)
+				{
+					if (!dictionary2.ContainsKey(text))
+					{
+						dictionary2.Add(text.ToLower(), text);
+					}
+				}
+				Dictionary<string, string> dictionary3 = new Dictionary<string, string>();
+				foreach (string text2 in UserConfig.Instance.ColorLockList)
+				{
+					if (!dictionary3.ContainsKey(text2))
+					{
+						dictionary3.Add(text2.ToLower(), text2);
+					}
+				}
+				List<MenuInfo> list = new List<MenuInfo>();
+                Console.WriteLine("PropMyItem：完了 "+ menuItems.Count);
+				this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
+                Console.WriteLine("PropMyItem：完了 "+ menuItems.Count);
+				this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
+                Console.WriteLine("PropMyItem：完了 " + menuItems.Count);
+				this.SetVariationMenu(dictionary2, dictionary3, ref list);
                 this.sort(false, true);
                 this.setColorSet();
-                Config.Instance.MenuItems = menuItems;
-                Config.Instance.Save();
-                if (dictionary.Count == 0)
+                COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems = menuItems;
+                COM3D2.PropMyItem.Plugin.Config.Instance.Save();
+				if (dictionary.Count == 0)
                 {
                     Console.WriteLine("PropMyItem：完了");
                 }
@@ -1741,6 +1753,9 @@ namespace COM3D2.PropMyItem.Plugin
                 Console.WriteLine(value);
             }
             _isLoadead = false;
+            _isForcedInit = false;
+            Console.Write("PropMyItem：LoadMenuFiles...ed "+ COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.Count);
+            Console.Write("PropMyItem：LoadMenuFiles...ed "+ this._mpnMenuListDictionary.Count);
         }
 
         // Token: 0x06000043 RID: 67 RVA: 0x00007088 File Offset: 0x00005288
@@ -1771,8 +1786,7 @@ namespace COM3D2.PropMyItem.Plugin
             };
             foreach (MPN key in this._mpnMenuListDictionary.Keys)
             {
-                List<MenuInfo> list = this._mpnMenuListDictionary[key];
-                list.Sort(comparator);
+				this._mpnMenuListDictionary[key].Sort(comparison);
                 if (isColorNumber)
                 {
                     foreach (MenuInfo menuInfo in this._mpnMenuListDictionary[key])
@@ -1807,35 +1821,40 @@ namespace COM3D2.PropMyItem.Plugin
                     dictionary.Add(key, text);
                 }
             }
-            List<string> list = new List<string>();
+            List<string> list = new List<string>(); //saveItems.Select(x=>x.FileName); //new List<string>();
 
-            MenuDataBase database = GameMain.Instance.MenuDataBase;
+			MenuDataBase menuDataBase = GameMain.Instance.MenuDataBase;
 
+            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
             // foreach (string text2 in menuFiles)
-            for (int i = 0; i < database.GetDataSize(); i++)
-            {
-                database.SetIndex(i);
-                string menuFile = database.GetMenuFileName();
-                ParseMainMenuFile(menuFile, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
+			for (int j = 0; j < menuDataBase.GetDataSize(); j++)
+			{
+				menuDataBase.SetIndex(j);
+				string menuFileName = menuDataBase.GetMenuFileName();
+				this.ParseMainMenuFile(menuFileName, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
             }
-
+            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
+            Console.WriteLine("GetMainMenuFiles " + saveItems[saveItems.Count - 1].FileName);
             foreach (string menuFile in GameUty.ModOnlysMenuFiles)
             {
+
                 ParseMainMenuFile(menuFile, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
             }
+            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
+            Console.WriteLine("GetMainMenuFiles " + saveItems[saveItems.Count-1].FileName);
         }
 
         // lmao
         private void ParseMainMenuFile(string menuFile, List<string> list, ref List<MenuInfo> variationMenuList, Dictionary<string, MenuInfo> loadItems, Dictionary<string, string> dictionary, Dictionary<string, string> favDic, Dictionary<string, string> colorLockDic, ref List<SMenuInfo> saveItems)
         {
-            ReadOnlyDictionary<string, bool> havePartsItems = GameMain.Instance.CharacterMgr.status.havePartsItems;
-            try
-            {
-                if (menuFile.IndexOf("_i_man_") != 0 && menuFile.IndexOf("mbody") != 0 && menuFile.IndexOf("mhead") != 0 && !(Path.GetExtension(menuFile) != ".menu"))
-                {
-                    string fileName = Path.GetFileName(menuFile);
-                    this._menuList.Add(fileName.ToLower());
-                    if (fileName.Contains("cv_pattern"))
+			ReadOnlyDictionary<string, bool> havePartsItems = GameMain.Instance.CharacterMgr.status.havePartsItems;
+			try
+			{
+				if (menuFile.IndexOf("_i_man_") != 0 && menuFile.IndexOf("mbody") != 0 && menuFile.IndexOf("mhead") != 0 && !(Path.GetExtension(menuFile) != ".menu"))
+				{
+					string fileName = Path.GetFileName(menuFile);
+					this._menuList.Add(fileName.ToLower());
+					if (fileName.Contains("cv_pattern"))
                     {
                         this._myPatternList.Add(fileName.ToLower());
                     }
@@ -2150,7 +2169,7 @@ namespace COM3D2.PropMyItem.Plugin
         private bool _isFreeColor;
 
         // Token: 0x04000044 RID: 68
-        private bool _isForcedInit;
+        private static bool _isForcedInit;
 
         // Token: 0x04000045 RID: 69
         //private bool _isStartUpLoadead;
