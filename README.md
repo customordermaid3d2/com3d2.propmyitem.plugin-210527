@@ -1,14 +1,14 @@
-# 개조판
+# 이게 뭐지 what is?
 
 로딩시간동안 겜이 멈추는걸 방지  
 겜 시작시 바로 데이터 로딩이 스레드로 진행됨  
 
-# 넣는곳
+# 넣는곳 setup
 
 COM3D2.PropMyItem.Plugin.dll 는 UnityInjector 폴더
 System.Threading.dll 는 COM3D2\BepInEx\plugins 폴더
 
-# 필요한거
+# 필요한거 need
 
 - BepInEx https://github.com/BepInEx/BepInEx  
 - SybarisLoader https://github.com/BepInEx/BepInEx.SybarisLoader.Patcher  
