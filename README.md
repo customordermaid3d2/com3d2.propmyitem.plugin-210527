@@ -3,6 +3,8 @@
 로딩시간동안 겜이 멈추는걸 방지  
 겜 시작시 바로 데이터 로딩이 스레드로 진행됨  
 
+BepIn Threading version  
+
 # 넣는곳 setup
 
 COM3D2.PropMyItem.Plugin.dll 는 UnityInjector 폴더
