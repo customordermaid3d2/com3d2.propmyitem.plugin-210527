@@ -1786,7 +1786,7 @@ namespace COM3D2.PropMyItem.Plugin
             };
             foreach (MPN key in this._mpnMenuListDictionary.Keys)
             {
-				this._mpnMenuListDictionary[key].Sort(comparison);
+				this._mpnMenuListDictionary[key].Sort(comparator);
                 if (isColorNumber)
                 {
                     foreach (MenuInfo menuInfo in this._mpnMenuListDictionary[key])
