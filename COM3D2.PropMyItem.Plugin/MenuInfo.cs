@@ -36,8 +36,30 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x04000014 RID: 20
         public float Priority;
 
+        Texture2D icon = null;
+
         // Token: 0x04000015 RID: 21
-        public Texture2D Icon;
+        public Texture2D Icon {
+            get
+            {
+                if (data != null)
+                {
+                    icon = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+                    icon.LoadImage(data);
+                    data = null;
+                }
+                return icon;
+            }
+            set
+            {
+                icon = value;
+            }
+        }
+
+            //menuInfo.Icon = new Texture2D(1, 1, TextureFormat.RGBA32, false);// 여기서 문제됨
+        //menuInfo.Icon.LoadImage(data);
+
+        public byte[] data = null;
 
         // Token: 0x04000016 RID: 22
         public MPN ColorSetMPN = MPN.head;

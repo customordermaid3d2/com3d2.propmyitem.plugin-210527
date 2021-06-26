@@ -6,6 +6,9 @@
         <AssemblyName>COM3D2.PropMyItem.Plugin</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>..\..\_lib2\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\_lib2\Assembly-CSharp.dll</HintPath>
         </Reference>
@@ -13,16 +16,45 @@
           <HintPath>..\..\_lib2\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="BepInEx">
-          <HintPath>F:\COM3D2_155\BepInEx\core\BepInEx.dll</HintPath>
+          <HintPath>..\..\_lib2\BepInEx.dll</HintPath>
         </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
+        <Reference Include="System">
+          <Private>false</Private>
+        </Reference>
+        <Reference Include="System.Core">
+          <Private>false</Private>
+        </Reference>
         <Reference Include="System.Threading">
           <HintPath>..\..\_lib2\System.Threading.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml">
+          <Private>false</Private>
+        </Reference>
         <Reference Include="UnityEngine">
           <HintPath>..\..\_lib2\UnityEngine.dll</HintPath>
         </Reference>
     </ItemGroup>
+    <ItemGroup>
+      <Reference Update="System.Data">
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Update="System.Drawing">
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Update="System.Runtime.Serialization">
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Update="System.Xml.Linq">
+        <Private>false</Private>
+      </Reference>
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="copy &quot;$(TargetDir)*.dll&quot; &quot;C:\Downloads\plugin&quot;" />
+    </Target>
 </Project>

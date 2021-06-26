@@ -171,8 +171,7 @@ namespace COM3D2.PropMyItem.Plugin
             if (_menuFilesReady) yield break;
             while (!GameMain.Instance.MenuDataBase.JobFinished()) yield return null;
             _menuFilesReady = true;
-
-			Task.Factory.StartNew(() => this.LoadMenuFiles());
+            Task.Factory.StartNew(() => this.LoadMenuFiles());
 
             Console.WriteLine("PropMyItem: Menu files are ready");
         }
@@ -180,13 +179,14 @@ namespace COM3D2.PropMyItem.Plugin
         public void Start()
         {
             GameMain.Instance.StartCoroutine(CheckMenuDatabase());
-            try
-            {
-                SceneManager.sceneLoaded += this.OnSceneLoaded;
-            }
-            catch (Exception)
-            {
-            }
+            SceneManager.sceneLoaded += this.OnSceneLoaded;
+            //try
+            //{
+            //}
+            //catch (Exception)
+            //{
+            //}
+			
         }
 
         // Token: 0x0600002D RID: 45 RVA: 0x0000383C File Offset: 0x00001A3C
@@ -1718,11 +1718,11 @@ namespace COM3D2.PropMyItem.Plugin
 					}
 				}
 				List<MenuInfo> list = new List<MenuInfo>();
-                Console.WriteLine("PropMyItem：完了 "+ menuItems.Count);
+                Console.WriteLine("PropMyItem：完了1 "+ menuItems.Count);
 				this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                Console.WriteLine("PropMyItem：完了 "+ menuItems.Count);
-				this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                Console.WriteLine("PropMyItem：完了 " + menuItems.Count);
+                Console.WriteLine("PropMyItem：完了2 "+ menuItems.Count);
+				this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);// 여기서 에러남
+                Console.WriteLine("PropMyItem：完了3 " + menuItems.Count);
 				this.SetVariationMenu(dictionary2, dictionary3, ref list);
                 this.sort(false, true);
                 this.setColorSet();
@@ -1949,7 +1949,7 @@ namespace COM3D2.PropMyItem.Plugin
                         string fileName2 = Path.GetFileName(text2);
                         if (!loadItems.TryGetValue(fileName2, out menuInfo))
                         {
-                            menuInfo = MenuModParser.parseMod(text2);
+                            menuInfo = MenuModParser.parseMod(text2);// 여기서 오류남
                         }
                         menuInfo.FileName = fileName2;
                         menuInfo.IsShopTarget = false;

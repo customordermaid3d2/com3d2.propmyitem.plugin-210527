@@ -109,8 +109,9 @@ namespace COM3D2.PropMyItem.Plugin
                     byte[] data = binaryReader.ReadBytes(count);
                     if (string.Compare(strA, menuInfo.IconName, true) == 0)
                     {
-                        menuInfo.Icon = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-                        menuInfo.Icon.LoadImage(data);
+                        menuInfo.data = data;
+                        //menuInfo.Icon = new Texture2D(1, 1, TextureFormat.RGBA32, false);// 여기서 문제됨
+                        //menuInfo.Icon.LoadImage(data);
                     }
                 }
             }
