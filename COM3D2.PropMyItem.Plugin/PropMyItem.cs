@@ -186,7 +186,7 @@ namespace COM3D2.PropMyItem.Plugin
             //catch (Exception)
             //{
             //}
-			
+
         }
 
         // Token: 0x0600002D RID: 45 RVA: 0x0000383C File Offset: 0x00001A3C
@@ -237,7 +237,7 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 else
                 {
-					if (this._isVisible && (!_isLoadead && _isForcedInit))
+                    if (this._isVisible && (!_isLoadead && _isForcedInit))
                     {
                         //this._isStartUpLoadead = true;
                         Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
@@ -1060,10 +1060,11 @@ namespace COM3D2.PropMyItem.Plugin
                                     menuInfo2.Icon = ImportCM.CreateTexture(menuInfo2.IconName);
                                     goto IL_632;
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    menuInfo2.IsError = true;
-                                    goto IL_D64;
+                                    //menuInfo2.IsError = true;
+                                    //goto IL_D64;
+                                    Console.WriteLine("PropMyItem：" + e.ToString());
                                 }
                             }
                             MenuInfo menuInfo4 = MenuModParser.parseMod(menuInfo2.FilePath);
@@ -1234,7 +1235,7 @@ namespace COM3D2.PropMyItem.Plugin
                     }
                     num13++;
                 }
-                IL_D64:;
+                //IL_D64:;
             }
             if (this._folders[this._selectedFolder].Name == "選択中")
             {
@@ -1304,7 +1305,7 @@ namespace COM3D2.PropMyItem.Plugin
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.ToString());
+                            Console.WriteLine("PropMyItem:" + ex.ToString());
                         }
                     }
                 }
@@ -1342,10 +1343,9 @@ namespace COM3D2.PropMyItem.Plugin
                             menuInfo.Icon = ImportCM.CreateTexture(menuInfo.IconName);
                             goto IL_10A;
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-                            menuInfo.IsError = true;
-                            goto IL_101;
+                            Console.WriteLine("PropMyItem：" + e.ToString());
                         }
                     }
                     MenuInfo menuInfo2 = MenuModParser.parseMod(menuInfo.FilePath);
@@ -1414,10 +1414,9 @@ namespace COM3D2.PropMyItem.Plugin
                                 menuInfo.Icon = ImportCM.CreateTexture(menuInfo.IconName);
                                 goto IL_125;
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
-                                menuInfo.IsError = true;
-                                goto IL_11C;
+                                Console.WriteLine("PropMyItem：" + e.ToString());
                             }
                         }
                         MenuInfo menuInfo2 = MenuModParser.parseMod(menuInfo.FilePath);
@@ -1674,7 +1673,7 @@ namespace COM3D2.PropMyItem.Plugin
             try
             {
                 List<SMenuInfo> menuItems = new List<SMenuInfo>(); //COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems;//new List<SMenuInfo>();
-				Dictionary<string, MenuInfo> dictionary = new Dictionary<string, MenuInfo>();
+                Dictionary<string, MenuInfo> dictionary = new Dictionary<string, MenuInfo>();
                 if (!isInit)
                 {
                     using (List<SMenuInfo>.Enumerator enumerator = COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.GetEnumerator())
@@ -1682,53 +1681,57 @@ namespace COM3D2.PropMyItem.Plugin
                         while (enumerator.MoveNext())
                         {
                             SMenuInfo smenuInfo = enumerator.Current;
-							if (!dictionary.ContainsKey(smenuInfo.FileName))
+                            if (!dictionary.ContainsKey(smenuInfo.FileName))
                             {
-								dictionary.Add(smenuInfo.FileName, new MenuInfo(smenuInfo));
+                                dictionary.Add(smenuInfo.FileName, new MenuInfo(smenuInfo));
                             }
                         }
-						goto IL_CA;
+                        //	goto IL_CA;
                     }
                 }
-				this._mpnMenuListDictionary = new Dictionary<MPN, List<MenuInfo>>();
-				foreach (object obj in Enum.GetValues(typeof(MPN)))
-				{
-					MPN key = (MPN)obj;
-					this._mpnMenuListDictionary.Add(key, new List<MenuInfo>());
-				}
-				IL_CA:
-				if (dictionary.Count == 0)
-				{
+                else
+                {
+
+                    this._mpnMenuListDictionary = new Dictionary<MPN, List<MenuInfo>>();
+                    foreach (object obj in Enum.GetValues(typeof(MPN)))
+                    {
+                        MPN key = (MPN)obj;
+                        this._mpnMenuListDictionary.Add(key, new List<MenuInfo>());
+                    }
+                }
+                //IL_CA:
+                if (dictionary.Count == 0)
+                {
                     Console.Write("PropMyItem：準備中...");
-				}
-				Dictionary<string, string> dictionary2 = new Dictionary<string, string>();
-				foreach (string text in UserConfig.Instance.FavList)
-				{
-					if (!dictionary2.ContainsKey(text))
-					{
-						dictionary2.Add(text.ToLower(), text);
-					}
-				}
-				Dictionary<string, string> dictionary3 = new Dictionary<string, string>();
-				foreach (string text2 in UserConfig.Instance.ColorLockList)
-				{
-					if (!dictionary3.ContainsKey(text2))
-					{
-						dictionary3.Add(text2.ToLower(), text2);
-					}
-				}
-				List<MenuInfo> list = new List<MenuInfo>();
-                Console.WriteLine("PropMyItem：完了1 "+ menuItems.Count);
-				this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                Console.WriteLine("PropMyItem：完了2 "+ menuItems.Count);
-				this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);// 여기서 에러남
+                }
+                Dictionary<string, string> dictionary2 = new Dictionary<string, string>();
+                foreach (string text in UserConfig.Instance.FavList)
+                {
+                    if (!dictionary2.ContainsKey(text))
+                    {
+                        dictionary2.Add(text.ToLower(), text);
+                    }
+                }
+                Dictionary<string, string> dictionary3 = new Dictionary<string, string>();
+                foreach (string text2 in UserConfig.Instance.ColorLockList)
+                {
+                    if (!dictionary3.ContainsKey(text2))
+                    {
+                        dictionary3.Add(text2.ToLower(), text2);
+                    }
+                }
+                List<MenuInfo> list = new List<MenuInfo>();
+                Console.WriteLine("PropMyItem：完了1 " + menuItems.Count);
+                this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
+                Console.WriteLine("PropMyItem：完了2 " + menuItems.Count);
+                this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);// 여기서 에러남
                 Console.WriteLine("PropMyItem：完了3 " + menuItems.Count);
-				this.SetVariationMenu(dictionary2, dictionary3, ref list);
+                this.SetVariationMenu(dictionary2, dictionary3, ref list);
                 this.sort(false, true);
                 this.setColorSet();
                 COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems = menuItems;
                 COM3D2.PropMyItem.Plugin.Config.Instance.Save();
-				if (dictionary.Count == 0)
+                if (dictionary.Count == 0)
                 {
                     Console.WriteLine("PropMyItem：完了");
                 }
@@ -1754,8 +1757,8 @@ namespace COM3D2.PropMyItem.Plugin
             }
             _isLoadead = false;
             _isForcedInit = false;
-            Console.Write("PropMyItem：LoadMenuFiles...ed "+ COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.Count);
-            Console.Write("PropMyItem：LoadMenuFiles...ed "+ this._mpnMenuListDictionary.Count);
+            Console.Write("PropMyItem：LoadMenuFiles...ed " + COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.Count);
+            Console.Write("PropMyItem：LoadMenuFiles...ed " + this._mpnMenuListDictionary.Count);
         }
 
         // Token: 0x06000043 RID: 67 RVA: 0x00007088 File Offset: 0x00005288
@@ -1786,7 +1789,7 @@ namespace COM3D2.PropMyItem.Plugin
             };
             foreach (MPN key in this._mpnMenuListDictionary.Keys)
             {
-				this._mpnMenuListDictionary[key].Sort(comparator);
+                this._mpnMenuListDictionary[key].Sort(comparator);
                 if (isColorNumber)
                 {
                     foreach (MenuInfo menuInfo in this._mpnMenuListDictionary[key])
@@ -1823,38 +1826,38 @@ namespace COM3D2.PropMyItem.Plugin
             }
             List<string> list = new List<string>(); //saveItems.Select(x=>x.FileName); //new List<string>();
 
-			MenuDataBase menuDataBase = GameMain.Instance.MenuDataBase;
+            MenuDataBase menuDataBase = GameMain.Instance.MenuDataBase;
 
-            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
+            Console.WriteLine("PropMyItem.GetMainMenuFiles1 " + saveItems.Count);
             // foreach (string text2 in menuFiles)
-			for (int j = 0; j < menuDataBase.GetDataSize(); j++)
-			{
-				menuDataBase.SetIndex(j);
-				string menuFileName = menuDataBase.GetMenuFileName();
-				this.ParseMainMenuFile(menuFileName, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
+            for (int j = 0; j < menuDataBase.GetDataSize(); j++)
+            {
+                menuDataBase.SetIndex(j);
+                string menuFileName = menuDataBase.GetMenuFileName();
+                this.ParseMainMenuFile(menuFileName, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
             }
-            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
-            Console.WriteLine("GetMainMenuFiles " + saveItems[saveItems.Count - 1].FileName);
+            Console.WriteLine("PropMyItem.GetMainMenuFiles2 " + saveItems.Count);
+            Console.WriteLine("PropMyItem.GetMainMenuFiles2 " + saveItems[saveItems.Count - 1].FileName);
             foreach (string menuFile in GameUty.ModOnlysMenuFiles)
             {
 
                 ParseMainMenuFile(menuFile, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
             }
-            Console.WriteLine("GetMainMenuFiles " + saveItems.Count);
-            Console.WriteLine("GetMainMenuFiles " + saveItems[saveItems.Count-1].FileName);
+            Console.WriteLine("PropMyItem.GetMainMenuFiles3 " + saveItems.Count);
+            Console.WriteLine("PropMyItem.GetMainMenuFiles3 " + saveItems[saveItems.Count - 1].FileName);
         }
 
         // lmao
         private void ParseMainMenuFile(string menuFile, List<string> list, ref List<MenuInfo> variationMenuList, Dictionary<string, MenuInfo> loadItems, Dictionary<string, string> dictionary, Dictionary<string, string> favDic, Dictionary<string, string> colorLockDic, ref List<SMenuInfo> saveItems)
         {
-			ReadOnlyDictionary<string, bool> havePartsItems = GameMain.Instance.CharacterMgr.status.havePartsItems;
-			try
-			{
-				if (menuFile.IndexOf("_i_man_") != 0 && menuFile.IndexOf("mbody") != 0 && menuFile.IndexOf("mhead") != 0 && !(Path.GetExtension(menuFile) != ".menu"))
-				{
-					string fileName = Path.GetFileName(menuFile);
-					this._menuList.Add(fileName.ToLower());
-					if (fileName.Contains("cv_pattern"))
+            ReadOnlyDictionary<string, bool> havePartsItems = GameMain.Instance.CharacterMgr.status.havePartsItems;
+            try
+            {
+                if (menuFile.IndexOf("_i_man_") != 0 && menuFile.IndexOf("mbody") != 0 && menuFile.IndexOf("mhead") != 0 && !(Path.GetExtension(menuFile) != ".menu"))
+                {
+                    string fileName = Path.GetFileName(menuFile);
+                    this._menuList.Add(fileName.ToLower());
+                    if (fileName.Contains("cv_pattern"))
                     {
                         this._myPatternList.Add(fileName.ToLower());
                     }
@@ -1985,7 +1988,7 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine("PropMyItem:" + ex.StackTrace);
                 }
             }
         }
@@ -1998,17 +2001,27 @@ namespace COM3D2.PropMyItem.Plugin
             foreach (MenuInfo menuInfo in variationMenuList)
             {
                 string fileName = Path.GetFileName(menuInfo.FileName.ToLower());
+
                 int colorNumber = 0;
-                string[] array = Regex.Split(fileName, "_z\\d{1,4}");
-                if (array.Length > 1)
+                try
                 {
-                    int.TryParse(array[1].Remove(0, 3).Split(new char[]
+                    string[] array = Regex.Split(fileName, "_z\\d{1,4}");
+                    if (array.Length > 1)
                     {
+                        int.TryParse(array[1].Remove(0, 3).Split(new char[]
+                        {
                         '.',
                         '_'
-                    })[0], out colorNumber);
+                        })[0], out colorNumber);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("PropMyItem:"+fileName);
+                    Console.WriteLine("PropMyItem:" + e.ToString());
                 }
                 menuInfo.ColorNumber = colorNumber;
+
                 string text = Regex.Replace(fileName, "_z\\d{1,4}", "");
                 text = Regex.Replace(text, "_zurashi\\d{0,4}", "");
                 text = Regex.Replace(text, "_mekure\\d{0,4}", "");
@@ -2042,6 +2055,7 @@ namespace COM3D2.PropMyItem.Plugin
                         list2.Add(menuInfo);
                     }
                 }
+
             }
             foreach (MenuInfo menuInfo3 in list2)
             {

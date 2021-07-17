@@ -8,15 +8,19 @@
     <ItemGroup>
         <Reference Include="0Harmony">
           <HintPath>..\..\_lib2\0Harmony.dll</HintPath>
+          <Private>false</Private>
         </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\_lib2\Assembly-CSharp.dll</HintPath>
+          <Private>false</Private>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass">
           <HintPath>..\..\_lib2\Assembly-CSharp-firstpass.dll</HintPath>
+          <Private>false</Private>
         </Reference>
         <Reference Include="BepInEx">
           <HintPath>..\..\_lib2\BepInEx.dll</HintPath>
+          <Private>false</Private>
         </Reference>
         <Reference Include="System">
           <Private>false</Private>
@@ -26,12 +30,14 @@
         </Reference>
         <Reference Include="System.Threading">
           <HintPath>..\..\_lib2\System.Threading.dll</HintPath>
+          <Private>false</Private>
         </Reference>
         <Reference Include="System.Xml">
           <Private>false</Private>
         </Reference>
         <Reference Include="UnityEngine">
           <HintPath>..\..\_lib2\UnityEngine.dll</HintPath>
+          <Private>false</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup>
