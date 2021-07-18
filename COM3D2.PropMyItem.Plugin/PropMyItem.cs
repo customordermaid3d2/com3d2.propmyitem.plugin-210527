@@ -31,17 +31,19 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x0600002B RID: 43 RVA: 0x000030EC File Offset: 0x000012EC
         public PropMyItem()
         {
-            this._folders.Add(new PropMyItem.FolderMenu("頭", new string[]
+            this._folders.Add(new PropMyItem.FolderMenu("頭", new string[] // 얼굴
             {
                 "顔",
                 "眉",
                 "目",
                 "目ハイライト",
+                        "속눈썹위",
+                        "속눈썹아래",
                 "ほくろ",
                 "唇",
                 "歯"
             }));
-            this._folders.Add(new PropMyItem.FolderMenu("髪", new string[]
+            this._folders.Add(new PropMyItem.FolderMenu("髪", new string[] // 헤어
             {
                 "前髪",
                 "後髪",
@@ -110,6 +112,10 @@ namespace COM3D2.PropMyItem.Plugin
             this._categoryMPNDic.Add("ほくろ", MPN.hokuro);
             this._categoryMPNDic.Add("唇", MPN.lip);
             this._categoryMPNDic.Add("歯", MPN.accha);
+
+            this._categoryMPNDic.Add("속눈썹위", MPN.folder_matsuge_up);
+            this._categoryMPNDic.Add("속눈썹아래", MPN.folder_matsuge_low);
+
             this._categoryMPNDic.Add("前髪", MPN.hairf);
             this._categoryMPNDic.Add("後髪", MPN.hairr);
             this._categoryMPNDic.Add("横髪", MPN.hairs);
@@ -1095,7 +1101,7 @@ namespace COM3D2.PropMyItem.Plugin
                                         Console.WriteLine("PropMyItem：change item = " + menuInfo2.FileName);
                                     }
                                     visibleMaidList2[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
-                                    if ((menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+                                    if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
                                     {
                                         MenuInfo menuInfo5 = this._selectedVariationItem.ColorSetMenuList[0];
                                         visibleMaidList2[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo5.FileName, Path.GetFileName(menuInfo5.FileName).GetHashCode(), false, false);
@@ -1212,7 +1218,7 @@ namespace COM3D2.PropMyItem.Plugin
                                         Console.WriteLine("PropMyItem：change item = " + menuInfo2.FileName);
                                     }
                                     visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
-                                    if ((menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+                                    if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
                                     {
                                         MenuInfo menuInfo6 = this._selectedVariationItem.ColorSetMenuList[0];
                                         visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo6.FileName, Path.GetFileName(menuInfo6.FileName).GetHashCode(), false, false);
@@ -1484,6 +1490,14 @@ namespace COM3D2.PropMyItem.Plugin
                     MPN mpn = this._selectedItem.MPN;
                     switch (mpn)
                     {
+                        case MPN.folder_matsuge_up:
+                            parts_COLOR = MaidParts.PARTS_COLOR.MATSUGE_UP;
+                            goto IL_189;
+
+                        case MPN.folder_matsuge_low:
+                            parts_COLOR = MaidParts.PARTS_COLOR.MATSUGE_LOW;
+                            goto IL_189;
+
                         case MPN.hairf:
                         case MPN.hairr:
                         case MPN.hairt:
