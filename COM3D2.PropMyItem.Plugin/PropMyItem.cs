@@ -177,8 +177,8 @@ namespace COM3D2.PropMyItem.Plugin
             if (_menuFilesReady) yield break;
             while (!GameMain.Instance.MenuDataBase.JobFinished()) yield return null;
             _menuFilesReady = true;
-            Task.Factory.StartNew(() => this.LoadMenuFiles());
-
+            _isLoading = true;
+            task = Task.Factory.StartNew(() => this.LoadMenuFiles());
             Console.WriteLine("PropMyItem: Menu files are ready");
         }
 
@@ -243,13 +243,24 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 else
                 {
-                    if (this._isVisible && (!_isLoadead && _isForcedInit))
+                        /*
+                    if (this._isVisible && (_isForcedInit))
                     {
+                        if (_isLoading)
+                        {
+                            Console.Write("PropMyItem：_isLoading...");
+                            //return;
+                        }
+                        else
+                        {
+                            _isLoading = true;
+                            task = Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
+                        }
                         //this._isStartUpLoadead = true;
-                        Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
                         //this.LoadMenuFiles(this._isForcedInit);
                         //this._isForcedInit = false;
                     }
+                        */
                     if (this._isVisible && this._windowRect.Contains(new Vector2(Input.mousePosition.x, (float)Screen.height - Input.mousePosition.y)))
                     {
                         GameMain.Instance.MainCamera.SetControl(false);
@@ -351,6 +362,16 @@ namespace COM3D2.PropMyItem.Plugin
                 this._isShowSetting = false;
                 this._isPluginKeyChange = false;
                 _isForcedInit = true;
+                if (_isLoading)
+                {
+                    Console.Write("PropMyItem：_isLoading...");
+                    //return;
+                }
+                else
+                {
+                    _isLoading = true;
+                    task = Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
+                }
             }
             num += GuiStyles.ControlHeight + GuiStyles.Margin + GuiStyles.Margin;
             if (GUI.Button(new Rect(margin, num, width, GuiStyles.ControlHeight), "戻る", GuiStyles.ButtonStyle))
@@ -494,6 +515,8 @@ namespace COM3D2.PropMyItem.Plugin
                     Rect position2 = new Rect(xPos + 85f, yPos, (float)(10 * GuiStyles.FontSize), GuiStyles.ControlHeight);
                     Rect position3 = new Rect(xPos, yPos + 24f, (float)(2 * GuiStyles.FontSize), GuiStyles.ControlHeight);
                     Rect position4 = new Rect(xPos + 85f, yPos + 24f, (float)(2 * GuiStyles.FontSize), GuiStyles.ControlHeight);
+                    Rect position5 = new Rect(position4.x+ position4.width+ 5f, position4.y,75f, position4.height);
+                    
                     GUI.Label(position, visibleMaidList[this._selectedMaid].GetThumIcon(), GuiStyles.LabelStyle);
                     GuiStyles.LabelStyle.alignment = TextAnchor.MiddleLeft;
                     GUI.Label(position2, text, GuiStyles.LabelStyle);
@@ -506,6 +529,7 @@ namespace COM3D2.PropMyItem.Plugin
                     {
                         this._selectedMaid = ((this._selectedMaid == visibleMaidList.Count - 1) ? 0 : (this._selectedMaid + 1));
                     }
+                    isAllMaid= GUI.Toggle(position5, isAllMaid, "All Maid", GuiStyles.ToggleStyle);
                 }
             }
             finally
@@ -1089,6 +1113,9 @@ namespace COM3D2.PropMyItem.Plugin
                         if (Event.current.type == EventType.Repaint)
                         {
                             GUI.enabled = enabled;
+
+
+
                             if (GUI.Button(position2, new GUIContent(menuInfo2.Icon, tooltip)))
                             {
                                 this._selectedItem = menuInfo2;
@@ -1100,15 +1127,22 @@ namespace COM3D2.PropMyItem.Plugin
                                     {
                                         Console.WriteLine("PropMyItem：change item = " + menuInfo2.FileName);
                                     }
-                                    visibleMaidList2[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
-                                    if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+                                    if (isAllMaid)
                                     {
-                                        MenuInfo menuInfo5 = this._selectedVariationItem.ColorSetMenuList[0];
-                                        visibleMaidList2[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo5.FileName, Path.GetFileName(menuInfo5.FileName).GetHashCode(), false, false);
+                                        foreach (var item in visibleMaidList2)
+                                        {
+                                            SetItem(menuInfo2, item);
+                                        }                                        
                                     }
-                                    visibleMaidList2[this._selectedMaid].AllProcProp();
+                                    else
+                                    {
+                                        SetItem(menuInfo2, visibleMaidList2[this._selectedMaid]);
+                                    }
                                 }
                             }
+
+
+
                             GUI.enabled = true;
                             GUIStyle style = guistyle2;
                             if (menuInfo2.IsFavorite)
@@ -1326,6 +1360,17 @@ namespace COM3D2.PropMyItem.Plugin
             {
                 this.guiSelectedVariation(ref xPos, yPos, this._selectedItem, num6, num7, windowHeight, text);
             }
+        }
+
+        private void SetItem(MenuInfo menuInfo2, Maid visibleMaidList2)
+        {
+            visibleMaidList2.SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
+            if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+            {
+                MenuInfo menuInfo5 = this._selectedVariationItem.ColorSetMenuList[0];
+                visibleMaidList2.SetProp(menuInfo2.ColorSetMPN, menuInfo5.FileName, Path.GetFileName(menuInfo5.FileName).GetHashCode(), false, false);
+            }
+            visibleMaidList2.AllProcProp();
         }
 
         // Token: 0x0600003E RID: 62 RVA: 0x00006364 File Offset: 0x00004564
@@ -1677,12 +1722,6 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x06000042 RID: 66 RVA: 0x00006D8C File Offset: 0x00004F8C
         public void LoadMenuFiles(bool isInit = false)
         {
-            if (_isLoadead)
-            {
-                Console.Write("PropMyItem：_isLoadead...");
-                return;
-            }
-            _isLoadead = true;
             Console.Write("PropMyItem：LoadMenuFiles...st");
             try
             {
@@ -1769,7 +1808,7 @@ namespace COM3D2.PropMyItem.Plugin
             {
                 Console.WriteLine(value);
             }
-            _isLoadead = false;
+            _isLoading = false;
             _isForcedInit = false;
             Console.Write("PropMyItem：LoadMenuFiles...ed " + COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems.Count);
             Console.Write("PropMyItem：LoadMenuFiles...ed " + this._mpnMenuListDictionary.Count);
@@ -2202,7 +2241,7 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x04000045 RID: 69
         //private bool _isStartUpLoadead;
 
-        private static bool _isLoadead;
+        private static bool _isLoading;
 
         // Token: 0x04000046 RID: 70
         private Dictionary<MPN, string> presetRestoreDic_ = new Dictionary<MPN, string>();
@@ -2218,6 +2257,8 @@ namespace COM3D2.PropMyItem.Plugin
 
         // Token: 0x0400004C RID: 76
         private List<string> _myPatternList = new List<string>();
+        private bool isAllMaid;
+        private Task task;
 
         // Token: 0x02000010 RID: 16
         private class FolderMenu
