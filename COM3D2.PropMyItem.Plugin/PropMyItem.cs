@@ -39,6 +39,7 @@ namespace COM3D2.PropMyItem.Plugin
                 "目ハイライト",
                         "속눈썹위",
                         "속눈썹아래",
+                        "쌍커플",
                 "ほくろ",
                 "唇",
                 "歯"
@@ -115,6 +116,7 @@ namespace COM3D2.PropMyItem.Plugin
 
             this._categoryMPNDic.Add("속눈썹위", MPN.folder_matsuge_up);
             this._categoryMPNDic.Add("속눈썹아래", MPN.folder_matsuge_low);
+            this._categoryMPNDic.Add("쌍커플", MPN.folder_futae);
 
             this._categoryMPNDic.Add("前髪", MPN.hairf);
             this._categoryMPNDic.Add("後髪", MPN.hairr);
@@ -1252,7 +1254,7 @@ namespace COM3D2.PropMyItem.Plugin
                                         Console.WriteLine("PropMyItem：change item = " + menuInfo2.FileName);
                                     }
                                     visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
-                                    if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+                                    if ((menuInfo2.MPN == MPN.folder_futae || menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
                                     {
                                         MenuInfo menuInfo6 = this._selectedVariationItem.ColorSetMenuList[0];
                                         visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo6.FileName, Path.GetFileName(menuInfo6.FileName).GetHashCode(), false, false);
@@ -1365,7 +1367,7 @@ namespace COM3D2.PropMyItem.Plugin
         private void SetItem(MenuInfo menuInfo2, Maid visibleMaidList2)
         {
             visibleMaidList2.SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
-            if ((menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
+            if ((menuInfo2.MPN == MPN.folder_futae || menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
             {
                 MenuInfo menuInfo5 = this._selectedVariationItem.ColorSetMenuList[0];
                 visibleMaidList2.SetProp(menuInfo2.ColorSetMPN, menuInfo5.FileName, Path.GetFileName(menuInfo5.FileName).GetHashCode(), false, false);
@@ -1541,6 +1543,10 @@ namespace COM3D2.PropMyItem.Plugin
 
                         case MPN.folder_matsuge_low:
                             parts_COLOR = MaidParts.PARTS_COLOR.MATSUGE_LOW;
+                            goto IL_189;
+                            
+                        case MPN.folder_futae :
+                            parts_COLOR = MaidParts.PARTS_COLOR.FUTAE;
                             goto IL_189;
 
                         case MPN.hairf:
@@ -2147,6 +2153,12 @@ namespace COM3D2.PropMyItem.Plugin
                     }
                 }
             }
+        }
+
+        public void OnApplicationQuit()
+        {
+            //MyLog.LogMessage("OnApplicationQuit");
+            //isTaskStop = true;
         }
 
         private bool _menuFilesReady = false;
