@@ -102,7 +102,8 @@ namespace COM3D2.PropMyItem.Plugin
             {
                 "服 / 身体",
                 "服",
-                "身体"
+                "身体",
+                "전부"
             }));
             this._folders.Add(new PropMyItem.FolderMenu("全て", new string[0]));
             this._folders.Add(new PropMyItem.FolderMenu("選択中", new string[0]));
@@ -245,24 +246,24 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 else
                 {
-                        /*
-                    if (this._isVisible && (_isForcedInit))
+                    /*
+                if (this._isVisible && (_isForcedInit))
+                {
+                    if (_isLoading)
                     {
-                        if (_isLoading)
-                        {
-                            Console.Write("PropMyItem：_isLoading...");
-                            //return;
-                        }
-                        else
-                        {
-                            _isLoading = true;
-                            task = Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
-                        }
-                        //this._isStartUpLoadead = true;
-                        //this.LoadMenuFiles(this._isForcedInit);
-                        //this._isForcedInit = false;
+                        Console.Write("PropMyItem：_isLoading...");
+                        //return;
                     }
-                        */
+                    else
+                    {
+                        _isLoading = true;
+                        task = Task.Factory.StartNew(() => this.LoadMenuFiles(_isForcedInit));
+                    }
+                    //this._isStartUpLoadead = true;
+                    //this.LoadMenuFiles(this._isForcedInit);
+                    //this._isForcedInit = false;
+                }
+                    */
                     if (this._isVisible && this._windowRect.Contains(new Vector2(Input.mousePosition.x, (float)Screen.height - Input.mousePosition.y)))
                     {
                         GameMain.Instance.MainCamera.SetControl(false);
@@ -465,7 +466,7 @@ namespace COM3D2.PropMyItem.Plugin
                     this.guiSelectedMaid(ref margin, ref yPos);
                     this.guiSelectedCategoryFolder(ref margin, yPos, this._windowRect.height);
                     this.guiSelectedCategory(ref margin, yPos, this._windowRect.height);
-                    if (this._folders[this._selectedFolder].Name == "プリセット")
+                    if (this._folders[this._selectedFolder].Name == "プリセット")//프리셋
                     {
                         this.guiSelectedPreset(ref margin, yPos, this._windowRect.height);
                     }
@@ -517,8 +518,8 @@ namespace COM3D2.PropMyItem.Plugin
                     Rect position2 = new Rect(xPos + 85f, yPos, (float)(10 * GuiStyles.FontSize), GuiStyles.ControlHeight);
                     Rect position3 = new Rect(xPos, yPos + 24f, (float)(2 * GuiStyles.FontSize), GuiStyles.ControlHeight);
                     Rect position4 = new Rect(xPos + 85f, yPos + 24f, (float)(2 * GuiStyles.FontSize), GuiStyles.ControlHeight);
-                    Rect position5 = new Rect(position4.x+ position4.width+ 5f, position4.y,75f, position4.height);
-                    
+                    Rect position5 = new Rect(position4.x + position4.width + 5f, position4.y, 75f, position4.height);
+
                     GUI.Label(position, visibleMaidList[this._selectedMaid].GetThumIcon(), GuiStyles.LabelStyle);
                     GuiStyles.LabelStyle.alignment = TextAnchor.MiddleLeft;
                     GUI.Label(position2, text, GuiStyles.LabelStyle);
@@ -531,7 +532,7 @@ namespace COM3D2.PropMyItem.Plugin
                     {
                         this._selectedMaid = ((this._selectedMaid == visibleMaidList.Count - 1) ? 0 : (this._selectedMaid + 1));
                     }
-                    isAllMaid= GUI.Toggle(position5, isAllMaid, "All Maid", GuiStyles.ToggleStyle);
+                    isAllMaid = GUI.Toggle(position5, isAllMaid, "All Maid", GuiStyles.ToggleStyle);
                 }
             }
             finally
@@ -562,7 +563,7 @@ namespace COM3D2.PropMyItem.Plugin
             float num2 = (float)((double)GuiStyles.ControlHeight * 1.5);
             for (int i = 0; i < this._folders.Count; i++)
             {
-                if (this._folders[i].Name == "全て")
+                if (this._folders[i].Name == "全て")//모든
                 {
                     yPos += GuiStyles.Margin * 2f;
                 }
@@ -578,7 +579,7 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 GUI.enabled = true;
             }
-            if (GUI.Button(new Rect(xPos, windowHeight - num2 - GuiStyles.Margin, num, num2), "設定", GuiStyles.ButtonStyle))
+            if (GUI.Button(new Rect(xPos, windowHeight - num2 - GuiStyles.Margin, num, num2), "設定", GuiStyles.ButtonStyle))//설정
             {
                 this._isShowSetting = true;
             }
@@ -673,21 +674,28 @@ namespace COM3D2.PropMyItem.Plugin
                         {
                             if (this._folders[this._selectedFolder].Name == "プリセット")
                             {
-                                List<CharacterMgr.Preset> list = GameMain.Instance.CharacterMgr.PresetListLoad();
-                                this._selectedPresetType = CharacterMgr.PresetType.All;
-                                if (this._folders[this._selectedFolder].Categories[i] == "服")
+                                if (this._folders[this._selectedFolder].Categories[i] == "전부")
                                 {
-                                    this._selectedPresetType = CharacterMgr.PresetType.Wear;
+                                    this._selectedPresetList = GameMain.Instance.CharacterMgr.PresetListLoad();
                                 }
-                                else if (this._folders[this._selectedFolder].Categories[i] == "身体")
+                                else
                                 {
-                                    this._selectedPresetType = CharacterMgr.PresetType.Body;
-                                }
-                                foreach (CharacterMgr.Preset preset in list)
-                                {
-                                    if (preset.ePreType == this._selectedPresetType)
+                                    List<CharacterMgr.Preset> list = GameMain.Instance.CharacterMgr.PresetListLoad();
+                                    this._selectedPresetType = CharacterMgr.PresetType.All;
+                                    if (this._folders[this._selectedFolder].Categories[i] == "服")
                                     {
-                                        this._selectedPresetList.Add(preset);
+                                        this._selectedPresetType = CharacterMgr.PresetType.Wear;
+                                    }
+                                    else if (this._folders[this._selectedFolder].Categories[i] == "身体")
+                                    {
+                                        this._selectedPresetType = CharacterMgr.PresetType.Body;
+                                    }
+                                    foreach (CharacterMgr.Preset preset in list)
+                                    {
+                                        if (preset.ePreType == this._selectedPresetType)
+                                        {
+                                            this._selectedPresetList.Add(preset);
+                                        }
                                     }
                                 }
                             }
@@ -768,7 +776,17 @@ namespace COM3D2.PropMyItem.Plugin
                                     MaidProp prop = maid.GetProp(mpn);
                                     this.presetRestoreDic_.Add(mpn, prop.strFileName);
                                 }
-                                GameMain.Instance.CharacterMgr.PresetSet(maid, this._selectedPresetList[i]);
+                                if (isAllMaid)
+                                {
+                                    foreach (var item in visibleMaidList)
+                                    {
+                                        GameMain.Instance.CharacterMgr.PresetSet(item, this._selectedPresetList[i]);
+                                    }
+                                }
+                                else
+                                {
+                                    GameMain.Instance.CharacterMgr.PresetSet(maid, this._selectedPresetList[i]);
+                                }
                             }
                         }
                     }
@@ -793,7 +811,17 @@ namespace COM3D2.PropMyItem.Plugin
                                 MaidProp prop2 = maid2.GetProp(mpn2);
                                 this.presetRestoreDic_.Add(mpn2, prop2.strFileName);
                             }
-                            GameMain.Instance.CharacterMgr.PresetSet(maid2, this._selectedPresetList[i]);
+                            if (isAllMaid)
+                            {
+                                foreach (var item in visibleMaidList2)
+                                {
+                                    GameMain.Instance.CharacterMgr.PresetSet(item, this._selectedPresetList[i]);
+                                }
+                            }
+                            else
+                            {
+                                GameMain.Instance.CharacterMgr.PresetSet(maid2, this._selectedPresetList[i]);
+                            }
                         }
                     }
                 }
@@ -1134,7 +1162,7 @@ namespace COM3D2.PropMyItem.Plugin
                                         foreach (var item in visibleMaidList2)
                                         {
                                             SetItem(menuInfo2, item);
-                                        }                                        
+                                        }
                                     }
                                     else
                                     {
@@ -1169,8 +1197,20 @@ namespace COM3D2.PropMyItem.Plugin
                             {
                                 if (GUI.Button(position4, new GUIContent("×", tooltip)))
                                 {
-                                    maid.DelProp(menuInfo2.MPN, false);
-                                    maid.AllProcProp();
+                                    if (isAllMaid)
+                                    {
+                                        foreach (var item in visibleMaidList)
+                                        {
+                                            item.DelProp(menuInfo2.MPN, false);
+                                            item.AllProcProp();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        maid.DelProp(menuInfo2.MPN, false);
+                                        maid.AllProcProp();
+                                    }
+
                                 }
                                 GUIStyle style2 = guistyle4;
                                 if (menuInfo2.IsColorLock)
@@ -1544,8 +1584,8 @@ namespace COM3D2.PropMyItem.Plugin
                         case MPN.folder_matsuge_low:
                             parts_COLOR = MaidParts.PARTS_COLOR.MATSUGE_LOW;
                             goto IL_189;
-                            
-                        case MPN.folder_futae :
+
+                        case MPN.folder_futae:
                             parts_COLOR = MaidParts.PARTS_COLOR.FUTAE;
                             goto IL_189;
 
@@ -2076,7 +2116,7 @@ namespace COM3D2.PropMyItem.Plugin
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("PropMyItem:"+fileName);
+                    Console.WriteLine("PropMyItem:" + fileName);
                     Console.WriteLine("PropMyItem:" + e.ToString());
                 }
                 menuInfo.ColorNumber = colorNumber;
