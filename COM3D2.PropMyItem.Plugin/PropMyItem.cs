@@ -1199,6 +1199,7 @@ namespace COM3D2.PropMyItem.Plugin
                                 {
                                     if (isAllMaid)
                                     {
+                                        //List<Maid> visibleMaidList = CommonUtil.GetVisibleMaidList();
                                         foreach (var item in visibleMaidList)
                                         {
                                             item.DelProp(menuInfo2.MPN, false);
@@ -1239,8 +1240,19 @@ namespace COM3D2.PropMyItem.Plugin
                             {
                                 if (GUI.Button(position4, new GUIContent("×", tooltip)))
                                 {
-                                    maid.DelProp(menuInfo2.MPN, false);
-                                    maid.AllProcProp();
+                                    if (isAllMaid)
+                                    {
+                                        foreach (var item in visibleMaidList)
+                                        {
+                                            item.DelProp(menuInfo2.MPN, false);
+                                            item.AllProcProp();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        maid.DelProp(menuInfo2.MPN, false);
+                                        maid.AllProcProp();
+                                    }
                                 }
                                 GUIStyle style3 = guistyle4;
                                 if (menuInfo2.IsColorLock)
@@ -1293,13 +1305,49 @@ namespace COM3D2.PropMyItem.Plugin
                                     {
                                         Console.WriteLine("PropMyItem：change item = " + menuInfo2.FileName);
                                     }
-                                    visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
+
+                                    if (isAllMaid)
+                                    {
+                                        foreach (var maid1 in visibleMaidList3)
+                                        {
+                                            maid1.SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.MPN, menuInfo2.FileName, Path.GetFileName(menuInfo2.FileName).GetHashCode(), false, false);
+                                    }
+
+
+
                                     if ((menuInfo2.MPN == MPN.folder_futae || menuInfo2.MPN == MPN.folder_matsuge_low || menuInfo2.MPN == MPN.folder_matsuge_up || menuInfo2.MPN == MPN.folder_eye || menuInfo2.MPN == MPN.folder_mayu || menuInfo2.MPN == MPN.folder_skin || menuInfo2.MPN == MPN.folder_underhair || menuInfo2.MPN == MPN.chikubi) && menuInfo2.ColorSetMenuList.Count > 0)
                                     {
                                         MenuInfo menuInfo6 = this._selectedVariationItem.ColorSetMenuList[0];
-                                        visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo6.FileName, Path.GetFileName(menuInfo6.FileName).GetHashCode(), false, false);
+                                        if (isAllMaid)
+                                        {
+                                            foreach (var maid1 in visibleMaidList)
+                                            {
+                                                maid1.SetProp(menuInfo2.ColorSetMPN, menuInfo6.FileName, Path.GetFileName(menuInfo6.FileName).GetHashCode(), false, false);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            visibleMaidList3[this._selectedMaid].SetProp(menuInfo2.ColorSetMPN, menuInfo6.FileName, Path.GetFileName(menuInfo6.FileName).GetHashCode(), false, false);
+                                        }
+                                        
                                     }
-                                    visibleMaidList3[this._selectedMaid].AllProcProp();
+                                    if (isAllMaid)
+                                    {
+                                        foreach (var maid1 in visibleMaidList)
+                                        {
+                                            maid1.AllProcProp();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        visibleMaidList3[this._selectedMaid].AllProcProp();
+                                    }
+                                    
                                 }
                             }
                             GUI.enabled = true;
@@ -1465,8 +1513,21 @@ namespace COM3D2.PropMyItem.Plugin
                     List<Maid> visibleMaidList = CommonUtil.GetVisibleMaidList();
                     if (this._selectedMaid >= 0 && visibleMaidList.Count - 1 >= this._selectedMaid)
                     {
-                        visibleMaidList[this._selectedMaid].SetProp(menuInfo.MPN, menuInfo.FileName, Path.GetFileName(menuInfo.FileName).GetHashCode(), false, false);
-                        visibleMaidList[this._selectedMaid].AllProcProp();
+                        if (isAllMaid)
+                        {
+                            foreach (var maid1 in visibleMaidList)
+                            {
+                                maid1.SetProp(menuInfo.MPN, menuInfo.FileName, Path.GetFileName(menuInfo.FileName).GetHashCode(), false, false);
+                                maid1.AllProcProp();
+                            }
+                        }
+                        else
+                        {
+                            visibleMaidList[this._selectedMaid].SetProp(menuInfo.MPN, menuInfo.FileName, Path.GetFileName(menuInfo.FileName).GetHashCode(), false, false);
+                            visibleMaidList[this._selectedMaid].AllProcProp();
+                        }
+
+
                         if (UserConfig.Instance.IsOutputInfoLog)
                         {
                             Console.WriteLine("PropMyItem：change item = " + menuInfo.FileName);
