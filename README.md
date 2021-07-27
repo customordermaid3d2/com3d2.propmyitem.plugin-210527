@@ -17,8 +17,7 @@ BepInEx Threading version
 
 # 넣는곳 setup
 
-COM3D2.PropMyItem.Plugin.dll 는 UnityInjector 폴더  
-System.Threading.dll 는 COM3D2\BepInEx\plugins 폴더  
+COM3D2\BepInEx\plugins
 
 
 # COM3D2.PropMyItem.Plugin
