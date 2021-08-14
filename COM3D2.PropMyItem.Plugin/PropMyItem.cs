@@ -761,6 +761,7 @@ namespace COM3D2.PropMyItem.Plugin
                             if (this._selectedMaid >= 0 && visibleMaidList.Count - 1 >= this._selectedMaid)
                             {
                                 Maid maid = visibleMaidList[this._selectedMaid];
+                                /*
                                 MPN[] array = new MPN[]
                                 {
                                     MPN.megane,
@@ -776,6 +777,7 @@ namespace COM3D2.PropMyItem.Plugin
                                     MaidProp prop = maid.GetProp(mpn);
                                     this.presetRestoreDic_.Add(mpn, prop.strFileName);
                                 }
+                                */
                                 if (isAllMaid)
                                 {
                                     foreach (var item in visibleMaidList)
@@ -796,6 +798,7 @@ namespace COM3D2.PropMyItem.Plugin
                         if (this._selectedMaid >= 0 && visibleMaidList2.Count - 1 >= this._selectedMaid)
                         {
                             Maid maid2 = visibleMaidList2[this._selectedMaid];
+                            /*
                             MPN[] array3 = new MPN[]
                             {
                                 MPN.megane,
@@ -811,6 +814,7 @@ namespace COM3D2.PropMyItem.Plugin
                                 MaidProp prop2 = maid2.GetProp(mpn2);
                                 this.presetRestoreDic_.Add(mpn2, prop2.strFileName);
                             }
+                            */
                             if (isAllMaid)
                             {
                                 foreach (var item in visibleMaidList2)
@@ -2357,7 +2361,7 @@ namespace COM3D2.PropMyItem.Plugin
         private static bool _isLoading;
 
         // Token: 0x04000046 RID: 70
-        private Dictionary<MPN, string> presetRestoreDic_ = new Dictionary<MPN, string>();
+        //private Dictionary<MPN, string> presetRestoreDic_ = new Dictionary<MPN, string>();
 
         // Token: 0x04000047 RID: 71
         private List<string> _menuList = new List<string>();
