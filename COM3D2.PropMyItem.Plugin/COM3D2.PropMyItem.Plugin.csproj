@@ -61,6 +61,6 @@
       </Reference>
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="copy &quot;$(TargetDir)*.dll&quot; &quot;C:\Downloads\plugin&quot;" />
+      <Exec Command="copy &quot;$(TargetDir)*.dll&quot; &quot;C:\Downloads\plugin&quot;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;F:\COM3D2\BepInEx\plugins&quot;" />
     </Target>
 </Project>

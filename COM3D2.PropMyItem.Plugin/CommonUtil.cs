@@ -90,22 +90,8 @@ namespace COM3D2.PropMyItem.Plugin
             string result = string.Empty;
             if (mpn != null)
             {
-                MPN? mpn2 = mpn;
-                MPN mpn3 = MPN.set_maidwear;
-                if (!(mpn2.GetValueOrDefault() == mpn3 & mpn2 != null))
-                {
-                    mpn2 = mpn;
-                    mpn3 = MPN.set_mywear;
-                    if (!(mpn2.GetValueOrDefault() == mpn3 & mpn2 != null))
-                    {
-                        mpn2 = mpn;
-                        mpn3 = MPN.set_underwear;
-                        if (!(mpn2.GetValueOrDefault() == mpn3 & mpn2 != null))
-                        {
-                            result = maid.GetProp(mpn.Value).strFileName;
-                        }
-                    }
-                }
+                if (mpn != MPN.set_maidwear && mpn != MPN.set_mywear && mpn != MPN.set_underwear && mpn != MPN.set_body)
+                    result = maid.GetProp(mpn.Value).strFileName;
             }
             return result;
         }

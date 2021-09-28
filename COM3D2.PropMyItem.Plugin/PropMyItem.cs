@@ -96,7 +96,8 @@ namespace COM3D2.PropMyItem.Plugin
             {
                 "メイド服",
                 "コスチューム",
-                "下着"
+                "下着",
+                "체형"
             }));
             this._folders.Add(new PropMyItem.FolderMenu("プリセット", new string[]
             {
@@ -155,9 +156,10 @@ namespace COM3D2.PropMyItem.Plugin
             this._categoryMPNDic.Add("背中", MPN.accsenaka);
             this._categoryMPNDic.Add("しっぽ", MPN.accshippo);
             this._categoryMPNDic.Add("前穴", MPN.accxxx);
-            this._categoryMPNDic.Add("メイド服", MPN.set_maidwear);
+            this._categoryMPNDic.Add("メイド服", MPN.set_maidwear);//메이드복
             this._categoryMPNDic.Add("コスチューム", MPN.set_mywear);
             this._categoryMPNDic.Add("下着", MPN.set_underwear);
+            this._categoryMPNDic.Add("체형", MPN.set_body);
             foreach (string text in this._categoryMPNDic.Keys)
             {
                 this._menuMPNCategoryDic.Add(this._categoryMPNDic[text], text);
@@ -914,7 +916,7 @@ namespace COM3D2.PropMyItem.Plugin
                     while (enumerator2.MoveNext())
                     {
                         MPN mpn = enumerator2.Current;
-                        if (mpn != MPN.set_maidwear && mpn != MPN.set_mywear && mpn != MPN.set_underwear)
+                        if (mpn != MPN.set_maidwear && mpn != MPN.set_mywear && mpn != MPN.set_underwear && mpn != MPN.set_body)
                         {
                             List<MenuInfo> list2 = null;
                             if (this._mpnMenuListDictionary.TryGetValue(mpn, out list2))
@@ -970,7 +972,7 @@ namespace COM3D2.PropMyItem.Plugin
             float num7 = num6;
             int num8 = itemList.Count;
             int num9 = 0;
-            if (this._selectedMPN == MPN.set_maidwear || this._selectedMPN == MPN.set_mywear || this._selectedMPN == MPN.set_underwear)
+            if (this._selectedMPN == MPN.set_maidwear || this._selectedMPN == MPN.set_mywear || this._selectedMPN == MPN.set_underwear|| this._selectedMPN == MPN.set_body)
             {
                 num6 = 75f;
                 num7 = num6 * 1.44f;
@@ -1360,7 +1362,7 @@ namespace COM3D2.PropMyItem.Plugin
                         if (count > 1)
                         {
                             Rect position6 = new Rect(position2.x + position2.width - num, position2.y + num3, 10f, 10f);
-                            if (menuInfo2.MPN == MPN.set_maidwear || menuInfo2.MPN == MPN.set_mywear || menuInfo2.MPN == MPN.set_underwear)
+                            if (menuInfo2.MPN == MPN.set_maidwear || menuInfo2.MPN == MPN.set_mywear || menuInfo2.MPN == MPN.set_underwear|| menuInfo2.MPN == MPN.set_body)
                             {
                                 position6 = new Rect(position2.x + position2.width - num2, position2.y + num3, 10f, 10f);
                             }
@@ -2004,7 +2006,6 @@ namespace COM3D2.PropMyItem.Plugin
             Console.WriteLine("PropMyItem.GetMainMenuFiles2 " + saveItems[saveItems.Count - 1].FileName);
             foreach (string menuFile in GameUty.ModOnlysMenuFiles)
             {
-
                 ParseMainMenuFile(menuFile, list, ref variationMenuList, loadItems, dictionary, favDic, colorLockDic, ref saveItems);
             }
             Console.WriteLine("PropMyItem.GetMainMenuFiles3 " + saveItems.Count);
