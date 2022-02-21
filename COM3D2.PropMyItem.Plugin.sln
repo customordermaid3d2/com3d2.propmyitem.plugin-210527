@@ -1,7 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.PropMyItem.Plugin", "COM3D2.PropMyItem.Plugin\COM3D2.PropMyItem.Plugin.csproj", "{8B644BAD-C562-46C6-A00A-8881DFB08F13}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D2.PropMyItem.Plugin", "COM3D2.PropMyItem.Plugin\COM3D2.PropMyItem.Plugin.csproj", "{0AA75022-4209-4024-B692-4BED4AF67A6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COM3D25.PropMyItem.Plugin", "COM3D25.PropMyItem.Plugin\COM3D25.PropMyItem.Plugin.csproj", "{A5B02B94-499A-40AB-998D-571EC45114A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,12 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8B644BAD-C562-46C6-A00A-8881DFB08F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B644BAD-C562-46C6-A00A-8881DFB08F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B644BAD-C562-46C6-A00A-8881DFB08F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B644BAD-C562-46C6-A00A-8881DFB08F13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AA75022-4209-4024-B692-4BED4AF67A6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AA75022-4209-4024-B692-4BED4AF67A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AA75022-4209-4024-B692-4BED4AF67A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AA75022-4209-4024-B692-4BED4AF67A6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5B02B94-499A-40AB-998D-571EC45114A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B02B94-499A-40AB-998D-571EC45114A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B02B94-499A-40AB-998D-571EC45114A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B02B94-499A-40AB-998D-571EC45114A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64BE7707-AF68-4BF4-B002-E02BCD376120}
 	EndGlobalSection
 EndGlobal

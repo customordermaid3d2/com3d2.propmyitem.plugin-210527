@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "8b644bad-c562-46c6-a00a-8881dfb08f13": {
+      "ProjectGuid": "8b644bad-c562-46c6-a00a-8881dfb08f13",
+      "DisplayName": "COM3D2.PropMyItem.Plugin",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
