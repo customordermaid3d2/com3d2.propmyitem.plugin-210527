@@ -17,6 +17,8 @@ namespace COM3D2.PropMyItem.Plugin
 {
     using static CommonUtil;
 
+
+
     // Token: 0x0200000A RID: 10
     //[PluginFilter("COM3D2x64")]
     //[PluginFilter("COM3D2x86")]
@@ -32,6 +34,12 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x0600002B RID: 43 RVA: 0x000030EC File Offset: 0x000012EC
 
         private ConfigEntry<KeyboardShortcut> ShowCounter { get; set; }
+        public Rect WindowRect;
+        
+        /*{ 
+            get => myWindowRect.WindowRect; 
+            set => myWindowRect.WindowRect = value; 
+        }*/
 
         public PropMyItem()
         {
@@ -177,12 +185,14 @@ namespace COM3D2.PropMyItem.Plugin
 
         public static BepInEx.Logging.ManualLogSource Log;
 
+        //public static MyWindowRect myWindowRect;
+
         // Token: 0x0600002C RID: 44 RVA: 0x00003808 File Offset: 0x00001A08
         public void Awake()
         {
             Log = Logger;
             PropMyItem.Log.LogMessage("Awake");
-
+            //myWindowRect = new MyWindowRect(Config, "COM3D2.PropMyItem.Plugin", "PropMyItem", "PMI" );
             ShowCounter = Config.Bind("Hotkeys", "Show FPS counter", new KeyboardShortcut(KeyCode.I, KeyCode.LeftShift));
         }
 
@@ -282,7 +292,7 @@ namespace COM3D2.PropMyItem.Plugin
                     //this._isForcedInit = false;
                 }
                     */
-                    if (this._isVisible && this._windowRect.Contains(new Vector2(Input.mousePosition.x, (float)Screen.height - Input.mousePosition.y)))
+                    if (this._isVisible && this.WindowRect.Contains(new Vector2(Input.mousePosition.x, (float)Screen.height - Input.mousePosition.y)))
                     {
                         GameMain.Instance.MainCamera.SetControl(false);
                         if (Event.current.type != EventType.KeyDown && Event.current.type != EventType.KeyUp)
@@ -312,24 +322,25 @@ namespace COM3D2.PropMyItem.Plugin
             }
             if (this._isShowSetting)
             {
-                this._windowRect = GUI.Window(PluginInfo.WindowID, this._windowRect, new GUI.WindowFunction(this.GuiSettingFunc), "PropMyItem", GuiStyles.WindowStyle);
+                this.WindowRect = GUI.Window(PluginInfo.WindowID, this.WindowRect, new GUI.WindowFunction(this.GuiSettingFunc), "PropMyItem", GuiStyles.WindowStyle);
                 return;
             }
             if (this._isShowFilterSetting)
             {
-                this._windowRect = GUI.Window(PluginInfo.WindowID, this._windowRect, new GUI.WindowFunction(this.GuiFilterSettingFunc), "PropMyItem", GuiStyles.WindowStyle);
+                this.WindowRect = GUI.Window(PluginInfo.WindowID, this.WindowRect, new GUI.WindowFunction(this.GuiFilterSettingFunc), "PropMyItem", GuiStyles.WindowStyle);
                 return;
             }
-            this._windowRect = GUI.Window(PluginInfo.WindowID, this._windowRect, new GUI.WindowFunction(this.GuiFunc), "PropMyItem", GuiStyles.WindowStyle);
+            this.WindowRect = GUI.Window(PluginInfo.WindowID, this.WindowRect, new GUI.WindowFunction(this.GuiFunc), "PropMyItem", GuiStyles.WindowStyle);
         }
 
         // Token: 0x06000030 RID: 48 RVA: 0x00003B40 File Offset: 0x00001D40
         private void GuiSettingFunc(int windowID)
         {
-            this._windowRect.width = 300f;
+            this.WindowRect.width = 300f;
+            //myWindowRect.WindowRect.width = 300f;
             float num = GuiStyles.ControlHeight + GuiStyles.Margin;
             float margin = GuiStyles.Margin;
-            float width = this._windowRect.width - GuiStyles.Margin * 2f;
+            float width = this.WindowRect.width - GuiStyles.Margin * 2f;
             /*
             string text = "キー入力待機中...";
             if (!this._isPluginKeyChange)
@@ -405,15 +416,15 @@ namespace COM3D2.PropMyItem.Plugin
                 //this._isPluginKeyChange = false;
             }
             num += GuiStyles.ControlHeight + GuiStyles.Margin;
-            this._windowRect.height = num;
+            this.WindowRect.height = num;
             GUI.DragWindow();
         }
 
         // Token: 0x06000031 RID: 49 RVA: 0x00003DF0 File Offset: 0x00001FF0
         private void GuiFilterSettingFunc(int windowID)
         {
-            float num = this._windowRect.width - GuiStyles.Margin * 2f;
-            float num2 = this._windowRect.height - GuiStyles.Margin * 2f;
+            float num = this.WindowRect.width - GuiStyles.Margin * 2f;
+            float num2 = this.WindowRect.height - GuiStyles.Margin * 2f;
             float num3 = GuiStyles.ControlHeight + GuiStyles.Margin;
             float num4 = GuiStyles.Margin;
             string text = "フィルタ文字列：";
@@ -477,41 +488,41 @@ namespace COM3D2.PropMyItem.Plugin
                 this._isMinimum = GUI.Toggle(position, this._isMinimum, text, GuiStyles.ToggleStyle);
                 if (this._isMinimum)
                 {
-                    this._windowRect.width = 100f;
-                    this._windowRect.height = GuiStyles.ControlHeight;
+                    this.WindowRect.width = 100f;
+                    this.WindowRect.height = GuiStyles.ControlHeight;
                 }
                 else
                 {
-                    this._windowRect.height = 570f;
+                    this.WindowRect.height = 570f;
                     float yPos = GuiStyles.ControlHeight + GuiStyles.Margin;
                     float margin = GuiStyles.Margin;
                     this.guiSelectedMaid(ref margin, ref yPos);
-                    this.guiSelectedCategoryFolder(ref margin, yPos, this._windowRect.height);
-                    this.guiSelectedCategory(ref margin, yPos, this._windowRect.height);
+                    this.guiSelectedCategoryFolder(ref margin, yPos, this.WindowRect.height);
+                    this.guiSelectedCategory(ref margin, yPos, this.WindowRect.height);
                     if (this._folders[this._selectedFolder].Name == "プリセット")//프리셋
                     {
-                        this.guiSelectedPreset(ref margin, yPos, this._windowRect.height);
+                        this.guiSelectedPreset(ref margin, yPos, this.WindowRect.height);
                     }
                     else if (this._folders[this._selectedFolder].Name == "Debug")
                     {
-                        this.guiDebug(ref margin, yPos, this._windowRect.height);
+                        this.guiDebug(ref margin, yPos, this.WindowRect.height);
                     }
                     else
                     {
                         if (this._selectedMPN != MPN.null_mpn || this._folders[this._selectedFolder].Name == "全て" || this._folders[this._selectedFolder].Name == "選択中")
                         {
                             this.guiSelectedItemFilter(margin, yPos);
-                            this.guiSelectedItem(ref margin, yPos, this._windowRect.height);
+                            this.guiSelectedItem(ref margin, yPos, this.WindowRect.height);
                         }
                         this.guiSelectedColorSet(ref margin, ref yPos);
                         this.guiSelectedMugenColor(ref margin, ref yPos);
                     }
-                    this._windowRect.width = margin;
+                    this.WindowRect.width = margin;
                 }
             }
             catch (Exception ex)
             {
-                CommonUtil.Log(ex.StackTrace);
+                //CommonUtil.Log(ex.StackTrace);
             }
             finally
             {
@@ -2293,7 +2304,7 @@ namespace COM3D2.PropMyItem.Plugin
         private int _sceneLevel;
 
         // Token: 0x04000029 RID: 41
-        private Rect _windowRect;
+        //private Rect _windowRect;
 
         // Token: 0x0400002A RID: 42
         private AutoShoesHide _autoShoesHide = new AutoShoesHide();

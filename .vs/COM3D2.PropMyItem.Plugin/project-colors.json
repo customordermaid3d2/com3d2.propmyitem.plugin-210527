@@ -5,7 +5,22 @@
       "ProjectGuid": "8b644bad-c562-46c6-a00a-8881dfb08f13",
       "DisplayName": "COM3D2.PropMyItem.Plugin",
       "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "기타 파일",
+      "ColorIndex": -1
+    },
+    "0aa75022-4209-4024-b692-4bed4af67a6b": {
+      "ProjectGuid": "0aa75022-4209-4024-b692-4bed4af67a6b",
+      "DisplayName": "COM3D2.PropMyItem.Plugin",
+      "ColorIndex": 1
+    },
+    "a5b02b94-499a-40ab-998d-571ec45114a0": {
+      "ProjectGuid": "a5b02b94-499a-40ab-998d-571ec45114a0",
+      "DisplayName": "COM3D25.PropMyItem.Plugin",
+      "ColorIndex": 2
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 3
 }
