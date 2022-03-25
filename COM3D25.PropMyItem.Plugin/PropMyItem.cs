@@ -12,6 +12,7 @@ using COM3D2.PropMyItem.Plugin;
 using wf;
 using System.Linq;
 using BepInEx.Configuration;
+using System.Diagnostics;
 
 namespace COM3D2.PropMyItem.Plugin
 {
@@ -1866,7 +1867,9 @@ namespace COM3D2.PropMyItem.Plugin
         // Token: 0x06000042 RID: 66 RVA: 0x00006D8C File Offset: 0x00004F8C
         public void LoadMenuFiles(bool isInit = false)
         {
-            PropMyItem.Log.LogMessage("LoadMenuFiles...st");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start(); // 시간측정 시작
+            PropMyItem.Log.LogMessage($"LoadMenuFiles...st {stopwatch.Elapsed}");
             try
             {
                 List<SMenuInfo> menuItems = new List<SMenuInfo>(); //COM3D2.PropMyItem.Plugin.Config.Instance.MenuItems;//new List<SMenuInfo>();
@@ -1918,11 +1921,11 @@ namespace COM3D2.PropMyItem.Plugin
                     }
                 }
                 List<MenuInfo> list = new List<MenuInfo>();
-                PropMyItem.Log.LogMessage("完了1 " + menuItems.Count);
+                PropMyItem.Log.LogMessage($"完了1 {menuItems.Count} {stopwatch.Elapsed} " );
                 this.GetMainMenuFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);
-                PropMyItem.Log.LogMessage("完了2 " + menuItems.Count);
+                PropMyItem.Log.LogMessage($"完了2 {menuItems.Count} {stopwatch.Elapsed} ");
                 this.GetModFiles(ref list, dictionary, dictionary2, dictionary3, ref menuItems);// 여기서 에러남
-                PropMyItem.Log.LogMessage("完了3 " + menuItems.Count);
+                PropMyItem.Log.LogMessage($"完了3 {menuItems.Count} {stopwatch.Elapsed} " );
                 this.SetVariationMenu(dictionary2, dictionary3, ref list);
                 this.sort(false, true);
                 this.setColorSet();
