@@ -657,7 +657,7 @@ namespace COM3D2.PropMyItem.Plugin
                             maid.AllProcProp();
                             if (UserConfig.Instance.IsOutputInfoLog)
                             {
-                                PropMyItem.Log.LogMessage("change item = " + fileName);
+                                PropMyItem.Log.LogMessage($"change item = {mpn} , {fileName}");
                             }
                             return;
                         }
